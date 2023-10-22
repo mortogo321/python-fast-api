@@ -12,3 +12,4 @@ services:
       - ../.env.development
     volumes:
       - ../:/app
+      - ../env:/app/env
