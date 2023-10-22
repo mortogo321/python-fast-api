@@ -3,3 +3,4 @@ pydantic
 pydantic_settings
 uvicorn
 SQLAlchemy
+email-validator

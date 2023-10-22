@@ -16,7 +16,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title=env("APP_NAME", "FastAPI"),
     description=env("APP_DESCRIPTION", ""),
-    version="0.0.1",
+    version=env("APP_VERSION", "0.0.1"),
     contact={
         "name": "@mortogo321",
         "url": "https://github.com/mortogo321",
