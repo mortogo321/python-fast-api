@@ -1,17 +1,27 @@
+from __future__ import annotations
+
+from contextlib import asynccontextmanager
 from os import getenv as env
 
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
-load_dotenv()
-
 from sqlalchemy.orm import Session
 
 from app import crud, schemas
 from app.database.sqlite import Base, SessionLocal, engine
+from app.libs.logger import logger
+from app.libs.logMiddleware import LogMiddleware
 
+load_dotenv()
 Base.metadata.create_all(bind=engine)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("==> FastAPI Starting..")
+    yield
+
 
 app = FastAPI(
     title=env("APP_NAME", "FastAPI"),
@@ -22,12 +32,14 @@ app = FastAPI(
         "url": "https://github.com/mortogo321",
         "email": "mortogo321@gmail.com",
     },
+    lifespan=lifespan,
 )
 
 origins = [
     "http://localhost:8080",
 ]
 
+app.add_middleware(LogMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
